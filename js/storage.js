@@ -28,3 +28,24 @@ function ensureDemoUser(){
     saveUsers(users);
   }
 }
+
+/* ---------------- storage helpers: tasks & seeding ---------------- */
+function loadTasks(){ return JSON.parse(localStorage.getItem(STORE_KEYS.tasks) || '[]'); }
+function saveTasks(t){ localStorage.setItem(STORE_KEYS.tasks, JSON.stringify(t)); }
+
+function seedIfEmpty(){
+  if (loadTasks().length) return;
+  const today = startOfToday();
+  const iso_ = (d) => iso(d);
+  const back = (n) => addDays(today, -n);
+
+  const demo = [
+    // contoh task lampau
+    { id: uid(), title: 'Reflect & recharge', desc: 'Review the day and slow things down before logging off.', date: iso_(back(1)), time: '21:00', category: 'personal', done: true },
+    { id: uid(), title: 'Grocery run', desc: 'Stock up on essentials for the week ahead.', date: iso_(back(2)), time: '10:00', category: 'personal', done: true },
+    // rencana hari ini
+    { id: uid(), title: 'Morning coffee & planning', desc: 'Sketch out the priorities for today before diving in.', date: iso_(today), time: '09:30', category: 'personal', done: false },
+    { id: uid(), title: 'Design task dashboard', desc: 'Collaborating on a dashboard layout with teammates.', date: iso_(today), time: '', category: 'work', done: false },
+  ];
+  saveTasks(demo);
+}
