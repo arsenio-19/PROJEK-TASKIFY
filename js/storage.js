@@ -49,3 +49,30 @@ function seedIfEmpty(){
   ];
   saveTasks(demo);
 }
+
+/* ---------------- utilities: validation, reset, export/import ---------------- */
+function clearTasks() {
+  localStorage.removeItem(STORE_KEYS.tasks);
+}
+
+function hasStorageData(key) {
+  return localStorage.getItem(key) !== null;
+}
+
+function exportTasksJSON() {
+  const tasks = loadTasks();
+  return JSON.stringify(tasks, null, 2);
+}
+
+function importTasksJSON(jsonString) {
+  try {
+    const tasks = JSON.parse(jsonString);
+    if (Array.isArray(tasks)) {
+      saveTasks(tasks);
+      return true;
+    }
+  } catch (e) {
+    console.error('Failed to import tasks:', e);
+  }
+  return false;
+}
